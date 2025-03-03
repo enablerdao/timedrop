@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				timedrop: {
+					blue: '#0EA5E9',
+					'light-blue': '#38BDF8',
+					'dark-blue': '#0284C7',
+					gray: '#F1F5F9',
+					'dark-gray': '#334155',
+					'muted-gray': '#94A3B8',
+					accent: '#F97316',
+					success: '#10B981',
 				}
 			},
 			borderRadius: {
@@ -84,11 +95,42 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'fade-out': {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' }
+				},
+				'slide-up': {
+					'0%': { transform: 'translateY(20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
+				'slide-down': {
+					'0%': { transform: 'translateY(-20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
+				'price-drop': {
+					'0%': { transform: 'translateY(0)', opacity: '1' },
+					'50%': { transform: 'translateY(10px)', opacity: '0.5' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
+				'pulse-soft': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'fade-out': 'fade-out 0.5s ease-out',
+				'slide-up': 'slide-up 0.7s ease-out',
+				'slide-down': 'slide-down 0.7s ease-out',
+				'price-drop': 'price-drop 2s infinite ease-in-out',
+				'pulse-soft': 'pulse-soft 3s infinite ease-in-out'
 			}
 		}
 	},
