@@ -1,4 +1,3 @@
-
 export interface Property {
   id: string;
   name: string;
@@ -13,6 +12,12 @@ export interface Property {
   description: string;
   features: string[];
   period?: string;
+  longStay?: {
+    monthlyPrice: number;
+    originalMonthlyPrice: number;
+    availableMonths: string[];
+    targetAudience?: string[];
+  };
 }
 
 export const sampleProperties: Property[] = [
@@ -29,7 +34,34 @@ export const sampleProperties: Property[] = [
     capacity: 6,
     description: 'ワイキキビーチまで徒歩1分、完全プライベートなビーチフロントヴィラ。広々としたラナイから毎日美しいサンセットを楽しめます。',
     features: ['ビーチフロント', 'プライベートプール', 'フルキッチン', '専用駐車場'],
-    period: '1ヶ月から'
+    period: '1ヶ月から',
+    longStay: {
+      monthlyPrice: 1000000,
+      originalMonthlyPrice: 2500000,
+      availableMonths: ['2025年5月', '2025年6月', '2025年7月'],
+      targetAudience: ['リモートワーカー', '長期滞在者', 'ノマドワーカー', '家族旅行']
+    }
+  },
+  {
+    id: 'hawaii-luxury-longstay',
+    name: 'ハワイ高級ビーチハウス【長期滞在向け】',
+    location: 'ハワイ・ノースショア',
+    rating: 4.8,
+    reviewCount: 36,
+    price: 95000,
+    originalPrice: 150000,
+    imageUrl: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&auto=format&fit=crop&q=60',
+    roomsLeft: 2,
+    capacity: 8,
+    description: 'ノースショアの美しいビーチに面した贅沢なビーチハウス。高速Wi-Fi完備で快適なリモートワークが可能。広々としたテラスからは絶景のオーシャンビューが広がります。',
+    features: ['高速Wi-Fi', 'ビーチフロント', 'ワークスペース', '専用プール', 'BBQ設備'],
+    period: '1ヶ月から',
+    longStay: {
+      monthlyPrice: 500000,
+      originalMonthlyPrice: 2500000,
+      availableMonths: ['2025年5月', '2025年6月', '2025年7月', '2025年8月'],
+      targetAudience: ['リモートワーカー', 'デジタルノマド', '家族連れ', '長期滞在者']
+    }
   },
   {
     id: 'atami-sauna',
