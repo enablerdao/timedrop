@@ -94,17 +94,36 @@ const PriceDropDemo = () => {
                 </div>
               </div>
               
-              {/* Atami villa image */}
-              <div className="rounded-xl overflow-hidden shadow-md mb-4">
-                <img 
-                  src="/lovable-uploads/3a53000d-b50d-44f2-b87a-5f6437e87e41.png" 
-                  alt="熱海の高台から見渡す景色が楽しめるモダンなヴィラ" 
-                  className="w-full h-auto"
-                />
+              {/* Property images gallery */}
+              <div className="space-y-6">
+                {/* Atami villa image */}
+                <div>
+                  <div className="rounded-xl overflow-hidden shadow-md mb-2">
+                    <img 
+                      src="/lovable-uploads/f787874c-5e7d-477a-9919-98e1cd3f7c76.png" 
+                      alt="熱海の高台からの絶景が楽しめるヴィラのベッドルーム" 
+                      className="w-full h-auto"
+                    />
+                  </div>
+                  <p className="text-sm text-timedrop-muted-gray italic text-center">
+                    熱海の高台に位置する贅沢なヴィラのベッドルームから見える絶景の相模湾。
+                  </p>
+                </div>
+                
+                {/* Teshikaga land image */}
+                <div>
+                  <div className="rounded-xl overflow-hidden shadow-md mb-2">
+                    <img 
+                      src="/lovable-uploads/c9ae6f23-0bce-4281-9fb5-fa06eeacb2f4.png" 
+                      alt="北海道弟子屈町の広大な土地" 
+                      className="w-full h-auto"
+                    />
+                  </div>
+                  <p className="text-sm text-timedrop-muted-gray italic text-center">
+                    北海道弟子屈町の3万坪の広大な土地。大自然に囲まれた贅沢な空間で、自分だけのリゾート体験を。
+                  </p>
+                </div>
               </div>
-              <p className="text-sm text-timedrop-muted-gray italic text-center">
-                熱海の高台に位置する、森の中の贅沢なヴィラからの眺望。
-              </p>
             </div>
           </AnimatedTransition>
           
