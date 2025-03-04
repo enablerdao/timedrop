@@ -51,7 +51,7 @@ const PriceDropDemo = () => {
                 時間とともに変わる<br /><span className="text-timedrop-blue">宿泊料金</span>の仕組み
               </h2>
               <p className="text-timedrop-muted-gray mb-6">
-                TimeDrop では、ホテルの空室状況や予約状況に応じて料金が変動します。
+                TimeDrop では、ビーチハウスや民泊施設の空室状況や予約状況に応じて料金が変動します。
                 一般的に、宿泊日に近づくにつれて料金は下がる傾向がありますが、
                 予約が増えると下落率は減少し、場合によっては料金が上がることもあります。
               </p>
@@ -88,7 +88,7 @@ const PriceDropDemo = () => {
                   <div>
                     <h3 className="text-lg font-medium text-timedrop-dark-gray">リスク管理</h3>
                     <p className="text-timedrop-muted-gray">
-                      価格が下がる可能性がある一方で、人気の高いホテルは予約が埋まる可能性もあります。あなたの判断が鍵です。
+                      価格が下がる可能性がある一方で、人気の高い施設は予約が埋まる可能性もあります。あなたの判断が鍵です。
                     </p>
                   </div>
                 </div>
@@ -100,7 +100,7 @@ const PriceDropDemo = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-border">
               <div className="text-center mb-6">
                 <h3 className="text-xl font-semibold text-timedrop-dark-gray">料金変動シミュレーション</h3>
-                <p className="text-timedrop-muted-gray">グランドホテル東京の1泊料金推移</p>
+                <p className="text-timedrop-muted-gray">熱海オーシャンビュー・サウナヴィラの1泊料金推移</p>
               </div>
               
               <div className="flex flex-col items-center mb-8">
@@ -154,7 +154,7 @@ const PriceDropDemo = () => {
               
               <div className="text-xs text-timedrop-muted-gray p-3 bg-timedrop-gray/50 rounded-lg">
                 <span className="block font-medium text-timedrop-dark-gray mb-1">注意事項:</span>
-                実際の価格変動はホテルの設定やリアルタイムの予約状況により異なります。
+                実際の価格変動はビーチハウスや民泊施設の設定やリアルタイムの予約状況により異なります。
                 上記はシミュレーションのため、実際のサービスとは異なる場合があります。
               </div>
             </div>
