@@ -1,25 +1,11 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Star, TrendingDown, Users, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Star, Users } from 'lucide-react';
 import PriceTag from '../ui/PriceTag';
-import { cn } from '@/lib/utils';
+import { type Property } from '@/data/properties';
 
-interface HotelCardProps {
-  id: string;
-  name: string;
-  location: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  originalPrice: number;
-  imageUrl: string;
-  roomsLeft?: number;
-  capacity?: number;
-  className?: string;
-}
-
-const HotelCard: React.FC<HotelCardProps> = ({
+const HotelCard: React.FC<Property> = ({
   id,
   name,
   location,
@@ -29,74 +15,82 @@ const HotelCard: React.FC<HotelCardProps> = ({
   originalPrice,
   imageUrl,
   roomsLeft,
-  capacity = 2,
-  className,
+  capacity,
+  description,
+  features,
+  period
 }) => {
-  // Calculate discount percentage
-  const discount = Math.round((1 - price / originalPrice) * 100);
-  const isLowAvailability = roomsLeft !== undefined && roomsLeft <= 3;
+  const navigate = useNavigate();
+  const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
 
   return (
-    <Link to={`/hotel/${id}`}>
-      <div className={cn(
-        'interactive-card overflow-hidden hover:translate-y-[-4px]',
-        className
-      )}>
-        <div className="relative w-full aspect-[4/3] overflow-hidden">
-          <img 
-            src={imageUrl} 
-            alt={name}
-            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-            loading="lazy"
-          />
-          
-          {discount >= 15 && (
-            <div className="absolute top-3 left-3 bg-timedrop-accent text-white text-xs font-medium px-2 py-1 rounded-md flex items-center gap-1">
-              <TrendingDown size={14} />
-              <span>{discount}% OFF</span>
-            </div>
-          )}
-          
-          {isLowAvailability && (
-            <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-timedrop-accent text-xs font-medium px-2 py-1 rounded-md">
-              残り{roomsLeft}室のみ！
-            </div>
-          )}
-        </div>
-        
-        <div className="p-4">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="font-medium text-timedrop-dark-gray">{name}</h3>
-            <div className="flex items-center gap-1 text-xs">
-              <Star size={14} className="text-yellow-400 fill-yellow-400" />
-              <span className="font-medium">{rating}</span>
-              <span className="text-timedrop-muted-gray">({reviewCount})</span>
-            </div>
+    <div 
+      onClick={() => navigate(`/hotels/${id}`)}
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border cursor-pointer group"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        {roomsLeft <= 3 && (
+          <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+            残り{roomsLeft}室
           </div>
-          
-          <div className="flex items-center text-xs text-timedrop-muted-gray mb-3">
-            <MapPin size={14} className="mr-1" />
-            <span>{location}</span>
-          </div>
-          
-          <div className="flex items-center text-xs text-timedrop-muted-gray mb-4">
-            <Users size={14} className="mr-1" />
-            <span>最大{capacity}名</span>
-          </div>
-          
-          <div className="flex justify-between items-end">
-            <div>
-              <div className="text-xs text-timedrop-muted-gray mb-1">1泊あたり</div>
-              <PriceTag price={price} originalPrice={originalPrice} size="md" />
-            </div>
-            
-            <button className="text-xs bg-timedrop-blue text-white px-3 py-1.5 rounded-lg hover:bg-timedrop-dark-blue transition-colors">
-              詳細を見る
-            </button>
-          </div>
-        </div>
+        )}
       </div>
-    </Link>
+
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="text-lg font-semibold text-timedrop-dark-gray line-clamp-2">
+            {name}
+          </h3>
+          <PriceTag price={price} originalPrice={originalPrice} size="sm" />
+        </div>
+
+        <p className="text-sm text-timedrop-muted-gray mb-3">{location}</p>
+
+        <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-1">
+            <Star className="text-yellow-400" size={16} />
+            <span className="text-sm font-medium text-timedrop-dark-gray">
+              {rating}
+            </span>
+            <span className="text-sm text-timedrop-muted-gray">
+              ({reviewCount})
+            </span>
+          </div>
+          <div className="flex items-center gap-1 text-timedrop-muted-gray">
+            <Users size={16} />
+            <span className="text-sm">最大{capacity}名</span>
+          </div>
+        </div>
+
+        <div className="mb-3">
+          <p className="text-sm text-timedrop-muted-gray line-clamp-2">
+            {description}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {features.map((feature, index) => (
+            <span
+              key={index}
+              className="px-2 py-1 bg-timedrop-gray/30 text-timedrop-dark-gray rounded-full text-xs"
+            >
+              {feature}
+            </span>
+          ))}
+        </div>
+
+        {period && (
+          <div className="mt-3 text-sm text-timedrop-muted-gray">
+            {period}から予約可能
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
