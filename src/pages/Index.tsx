@@ -25,7 +25,7 @@ const Index = () => {
                   さっそく体験してみませんか？
                 </h2>
                 <p className="text-timedrop-muted-gray max-w-2xl mx-auto">
-                  今すぐ民泊施設を検索して、TimeDrop の革新的な予約体験をお試しください。
+                  今すぐビーチハウスや熱海のヴィラなど、魅力的な民泊施設を検索して、TimeDrop の革新的な予約体験をお試しください。
                   時間とともに変化する価格を見守りながら、最適なタイミングで予約を確定できます。
                 </p>
               </div>
@@ -58,7 +58,7 @@ const Index = () => {
                   サービスについて
                 </a>
                 <a href="#" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
-                  ホテル一覧
+                  ヴィラ一覧
                 </a>
                 <a href="#" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
                   ヘルプ
@@ -80,4 +80,3 @@ const Index = () => {
 };
 
 export default Index;
-

@@ -29,7 +29,7 @@ const FeatureHighlight = () => {
     {
       icon: <TrendingDown size={24} />,
       title: "時間とともに価格が下がる",
-      description: "時間経過とともに宿泊料金が段階的に下がっていくシステムで、お得なタイミングで予約できます。",
+      description: "時間経過とともにビーチハウスや温泉宿の料金が段階的に下がっていくシステムで、お得なタイミングで予約できます。",
       delay: 100
     },
     {
@@ -47,7 +47,7 @@ const FeatureHighlight = () => {
     {
       icon: <Percent size={24} />,
       title: "値下がり率ランキング",
-      description: "値下がり率の高いホテルをランキング表示。大きな割引を狙いたい方におすすめです。",
+      description: "値下がり率の高い民泊施設をランキング表示。大きな割引を狙いたい方におすすめです。",
       delay: 400
     }
   ];

@@ -44,7 +44,7 @@ const Hero = () => {
           
           <AnimatedTransition animation="slide-up" delay={300}>
             <p className="text-lg text-timedrop-muted-gray mb-8 max-w-2xl">
-              TimeDrop では、時間経過とともに宿泊料金が段階的に下がっていきます。予約を急ぐか、価格下落を待つか、あなた次第です。
+              TimeDrop では、時間経過とともにビーチハウスや民泊施設の宿泊料金が段階的に下がっていきます。予約を急ぐか、価格下落を待つか、あなた次第です。
             </p>
           </AnimatedTransition>
 
@@ -100,9 +100,9 @@ const Hero = () => {
             <div className="flex flex-wrap items-center gap-4 text-sm text-timedrop-dark-gray">
               <span className="font-medium">人気の目的地:</span>
               {[
-                { name: 'ハワイ', id: 'hawaii-beachfront' },
-                { name: '熱海', id: 'atami-sauna' },
-                { name: '北海道', id: 'teshikaga-retreat' }
+                { name: 'ハワイのビーチハウス', id: 'hawaii-beachfront' },
+                { name: '熱海のサウナヴィラ', id: 'atami-sauna' },
+                { name: '北海道のリトリート', id: 'teshikaga-retreat' }
               ].map((location) => (
                 <button
                   key={location.name}
@@ -124,4 +124,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
