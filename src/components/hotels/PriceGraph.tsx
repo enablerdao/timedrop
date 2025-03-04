@@ -10,11 +10,12 @@ interface PricePoint {
 }
 
 interface PriceGraphProps {
-  data: PricePoint[];
+  data?: PricePoint[];
   currentPrice: number;
   originalPrice: number;
   className?: string;
   height?: number;
+  propertyId?: string; // Added propertyId as an optional prop
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -37,26 +38,30 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const PriceGraph: React.FC<PriceGraphProps> = ({
-  data,
+  data = [],  // Provide a default empty array for data
   currentPrice,
   originalPrice,
   className,
-  height = 200
+  height = 200,
+  propertyId
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   
   const discount = Math.round((1 - currentPrice / originalPrice) * 100);
   
+  // Generate mock data if no data is provided
+  const graphData = data.length > 0 ? data : generateMockData(currentPrice, originalPrice, propertyId);
+
   // Add gradient
   useEffect(() => {
     if (!chartRef.current) return;
     
     // Find min and max for better visualization
-    const prices = data.map(point => point.price);
+    const prices = graphData.map(point => point.price);
     const minPrice = Math.min(...prices) * 0.95;
     const maxPrice = Math.max(...prices) * 1.05;
     
-  }, [data]);
+  }, [graphData]);
 
   return (
     <div className={cn('bg-white rounded-xl border border-border p-4', className)} ref={chartRef}>
@@ -85,7 +90,7 @@ const PriceGraph: React.FC<PriceGraphProps> = ({
       <div style={{ height: `${height}px` }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={data}
+            data={graphData}
             margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
           >
             <defs>
@@ -144,5 +149,58 @@ const PriceGraph: React.FC<PriceGraphProps> = ({
     </div>
   );
 };
+
+// Helper function to generate mock data based on property ID
+function generateMockData(currentPrice: number, originalPrice: number, propertyId?: string): PricePoint[] {
+  // Get today and previous dates
+  const today = new Date();
+  const dateFormat = new Intl.DateTimeFormat('ja', { month: 'short', day: 'numeric' });
+  
+  // Generate random fluctuations based on the property ID (for consistency)
+  const seed = propertyId ? propertyId.charCodeAt(0) + propertyId.charCodeAt(propertyId.length - 1) : 42;
+  const rand = (min: number, max: number) => {
+    const x = Math.sin(seed) * 10000;
+    return Math.floor((x - Math.floor(x)) * (max - min) + min);
+  };
+  
+  // Generate past data (real prices)
+  const pastData: PricePoint[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+    
+    // Create a price point with some random fluctuation
+    const fluctuation = rand(85, 115) / 100;
+    const dayPrice = Math.round(
+      originalPrice - ((originalPrice - currentPrice) * (7 - i) / 7) * fluctuation
+    );
+    
+    pastData.push({
+      day: dateFormat.format(date),
+      price: dayPrice,
+      predicted: false
+    });
+  }
+  
+  // Generate future data (predicted prices)
+  const futureData: PricePoint[] = [];
+  for (let i = 1; i <= 3; i++) {
+    const date = new Date();
+    date.setDate(today.getDate() + i);
+    
+    // Create a predicted price point with some downward trend
+    const fluctuation = rand(85, 115) / 100;
+    const predictedReduction = rand(2, 8) / 100; // 2-8% reduction
+    const dayPrice = Math.round(currentPrice * (1 - predictedReduction * i) * fluctuation);
+    
+    futureData.push({
+      day: dateFormat.format(date),
+      price: dayPrice,
+      predicted: true
+    });
+  }
+  
+  return [...pastData, ...futureData];
+}
 
 export default PriceGraph;
