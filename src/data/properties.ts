@@ -58,5 +58,47 @@ export const sampleProperties: Property[] = [
     capacity: 4,
     description: '摩周湖を望む森の中のリトリート施設。4階建てのタワー型サウナから、大自然を見渡す贅沢な時間を。',
     features: ['タワーサウナ', '水風呂', '瞑想室', '専属サウナマスター']
+  },
+  {
+    id: 'kyoto-machiya',
+    name: '京都 町家一棟貸し',
+    location: '京都市東山区',
+    rating: 4.9,
+    reviewCount: 203,
+    price: 52000,
+    originalPrice: 75000,
+    imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&auto=format&fit=crop&q=60',
+    roomsLeft: 2,
+    capacity: 5,
+    description: '築100年以上の京町家を現代的にリノベーション。伝統的な意匠と現代の快適さが融合した特別な空間で京都の風情を体験できます。',
+    features: ['町家', '坪庭', '檜風呂', '無料貸出自転車']
+  },
+  {
+    id: 'okinawa-beach',
+    name: '沖縄プライベートビーチハウス',
+    location: '沖縄県恩納村',
+    rating: 4.8,
+    reviewCount: 167,
+    price: 68000,
+    originalPrice: 95000,
+    imageUrl: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&auto=format&fit=crop&q=60',
+    roomsLeft: 3,
+    capacity: 10,
+    description: 'プライベートビーチに直結した贅沢なビーチハウス。ウミガメが泳ぐ美しい海でシュノーケリングやカヤックが楽しめます。',
+    features: ['プライベートビーチ', '屋外シャワー', 'BBQ設備', 'マリン用品無料貸出']
+  },
+  {
+    id: 'hakuba-cabin',
+    name: '白馬マウンテンリゾートキャビン',
+    location: '長野県白馬村',
+    rating: 4.7,
+    reviewCount: 128,
+    price: 49000,
+    originalPrice: 72000,
+    imageUrl: 'https://images.unsplash.com/photo-1549298240-0d8e60513026?w=800&auto=format&fit=crop&q=60',
+    roomsLeft: 4,
+    capacity: 8,
+    description: 'ゲレンデまで徒歩5分の立地に建つログキャビン。薪ストーブとジャグジーで雪見を楽しむ至福のひとときを。',
+    features: ['薪ストーブ', 'ジャグジー', 'スキー置き場', 'ウッドデッキ']
   }
 ];

@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
-import HotelCard from '@/components/hotels/HotelCard';
+import RentalCard from '@/components/rentals/RentalCard';
 import { Search, Calendar, Users } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import { sampleProperties } from '@/data/properties';
 
-const Hotels = () => {
+const VacationRentals = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
@@ -63,7 +63,7 @@ const Hotels = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {sampleProperties.map((property, index) => (
               <AnimatedTransition key={property.id} animation="slide-up" delay={index * 100}>
-                <HotelCard {...property} />
+                <RentalCard {...property} />
               </AnimatedTransition>
             ))}
           </div>
@@ -73,4 +73,4 @@ const Hotels = () => {
   );
 };
 
-export default Hotels;
+export default VacationRentals;

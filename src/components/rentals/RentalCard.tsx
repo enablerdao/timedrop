@@ -5,7 +5,7 @@ import { Star, Users } from 'lucide-react';
 import PriceTag from '../ui/PriceTag';
 import { type Property } from '@/data/properties';
 
-const HotelCard: React.FC<Property> = ({
+const RentalCard: React.FC<Property> = ({
   id,
   name,
   location,
@@ -21,11 +21,10 @@ const HotelCard: React.FC<Property> = ({
   period
 }) => {
   const navigate = useNavigate();
-  const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
 
   return (
     <div 
-      onClick={() => navigate(`/hotels/${id}`)}
+      onClick={() => navigate(`/rentals/${id}`)}
       className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border cursor-pointer group"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -33,6 +32,11 @@ const HotelCard: React.FC<Property> = ({
           src={imageUrl}
           alt={name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "https://images.unsplash.com/photo-1606402179428-a57976d71fa4?w=800&auto=format&fit=crop&q=60";
+            target.alt = "民泊施設のイメージ";
+          }}
         />
         {roomsLeft <= 3 && (
           <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -94,4 +98,4 @@ const HotelCard: React.FC<Property> = ({
   );
 };
 
-export default HotelCard;
+export default RentalCard;

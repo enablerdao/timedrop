@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -14,10 +15,10 @@ import {
 } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import PriceTag from '@/components/ui/PriceTag';
-import PriceGraph from '@/components/hotels/PriceGraph';
+import PriceGraph from '@/components/rentals/PriceGraph';
 import { useToast } from '@/components/ui/use-toast';
 
-const HotelDetail = () => {
+const RentalDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -29,7 +30,7 @@ const HotelDetail = () => {
     if (foundProperty) {
       setProperty(foundProperty);
     } else {
-      navigate('/hotels');
+      navigate('/rentals');
     }
   }, [id, navigate]);
 
@@ -81,7 +82,7 @@ const HotelDetail = () => {
             <nav className="flex text-sm text-timedrop-muted-gray">
               <a href="/" className="hover:text-timedrop-primary">ホーム</a>
               <span className="mx-2">/</span>
-              <a href="/hotels" className="hover:text-timedrop-primary">物件一覧</a>
+              <a href="/rentals" className="hover:text-timedrop-primary">民泊一覧</a>
               <span className="mx-2">/</span>
               <span className="text-timedrop-dark-gray line-clamp-1">{property.name}</span>
             </nav>
@@ -261,4 +262,4 @@ const HotelDetail = () => {
   );
 };
 
-export default HotelDetail;
+export default RentalDetail;
