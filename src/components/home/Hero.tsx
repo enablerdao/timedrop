@@ -12,7 +12,7 @@ const Hero = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/hotels');
+    navigate('/rentals');
   };
 
   return (
@@ -99,16 +99,20 @@ const Hero = () => {
           <AnimatedTransition animation="slide-up" delay={500}>
             <div className="flex flex-wrap items-center gap-4 text-sm text-timedrop-dark-gray">
               <span className="font-medium">人気の目的地:</span>
-              {['東京', '大阪', '京都', '沖縄', '札幌'].map((city) => (
+              {[
+                { name: 'ハワイ', id: 'hawaii-beachfront' },
+                { name: '熱海', id: 'atami-sauna' },
+                { name: '北海道', id: 'teshikaga-retreat' }
+              ].map((location) => (
                 <button
-                  key={city}
+                  key={location.name}
                   onClick={() => {
-                    setDestination(city);
-                    navigate('/hotels');
+                    setDestination(location.name);
+                    navigate(`/rentals/${location.id}`);
                   }}
                   className="px-3 py-1 rounded-full border border-timedrop-gray hover:border-timedrop-blue hover:text-timedrop-blue transition-colors"
                 >
-                  {city}
+                  {location.name}
                 </button>
               ))}
             </div>
@@ -120,3 +124,4 @@ const Hero = () => {
 };
 
 export default Hero;
+

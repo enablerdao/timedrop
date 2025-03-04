@@ -25,7 +25,7 @@ const Index = () => {
                   さっそく体験してみませんか？
                 </h2>
                 <p className="text-timedrop-muted-gray max-w-2xl mx-auto">
-                  今すぐホテルを検索して、TimeDrop の革新的な予約体験をお試しください。
+                  今すぐ民泊施設を検索して、TimeDrop の革新的な予約体験をお試しください。
                   時間とともに変化する価格を見守りながら、最適なタイミングで予約を確定できます。
                 </p>
               </div>
@@ -34,10 +34,10 @@ const Index = () => {
             <AnimatedTransition animation="slide-up" delay={100}>
               <div className="flex justify-center">
                 <a
-                  href="/hotels"
+                  href="/rentals"
                   className="bg-timedrop-blue hover:bg-timedrop-dark-blue text-white py-4 px-8 rounded-xl flex items-center space-x-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:translate-y-[-2px]"
                 >
-                  <span className="font-medium">ホテルを検索する</span>
+                  <span className="font-medium">民泊施設を検索する</span>
                   <ArrowRight size={18} />
                 </a>
               </div>
@@ -80,3 +80,4 @@ const Index = () => {
 };
 
 export default Index;
+
