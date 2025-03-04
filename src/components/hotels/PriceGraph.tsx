@@ -15,7 +15,7 @@ interface PriceGraphProps {
   originalPrice: number;
   className?: string;
   height?: number;
-  propertyId?: string; // Added propertyId as an optional prop
+  propertyId?: string;
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const PriceGraph: React.FC<PriceGraphProps> = ({
-  data = [],  // Provide a default empty array for data
+  data = [],
   currentPrice,
   originalPrice,
   className,
@@ -62,6 +62,10 @@ const PriceGraph: React.FC<PriceGraphProps> = ({
     const maxPrice = Math.max(...prices) * 1.05;
     
   }, [graphData]);
+
+  // Split data into actual and predicted datasets for better visualization
+  const actualData = graphData.filter(point => !point.predicted);
+  const predictedData = graphData.filter(point => point.predicted);
 
   return (
     <div className={cn('bg-white rounded-xl border border-border p-4', className)} ref={chartRef}>
@@ -98,6 +102,10 @@ const PriceGraph: React.FC<PriceGraphProps> = ({
                 <stop offset="5%" stopColor="#0EA5E9" stopOpacity={0.2}/>
                 <stop offset="95%" stopColor="#0EA5E9" stopOpacity={0}/>
               </linearGradient>
+              <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#94A3B8" stopOpacity={0.1}/>
+                <stop offset="95%" stopColor="#94A3B8" stopOpacity={0}/>
+              </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
             <XAxis 
@@ -114,23 +122,36 @@ const PriceGraph: React.FC<PriceGraphProps> = ({
               tickFormatter={(value) => `¥${value.toLocaleString()}`}
             />
             <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine y={currentPrice} stroke="#0EA5E9" strokeDasharray="3 3" />
+            <ReferenceLine 
+              y={currentPrice} 
+              stroke="#0EA5E9" 
+              strokeDasharray="3 3" 
+              label={{ value: '現在', position: 'insideBottomLeft', fill: '#0EA5E9', fontSize: 10 }}
+            />
+            
+            {/* Historical price data */}
             <Area 
               type="monotone" 
               dataKey="price" 
+              data={actualData}
               stroke="#0EA5E9" 
               strokeWidth={2}
               fill="url(#colorPrice)"
               activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
               dot={{ r: 3, stroke: 'white', strokeWidth: 2, fill: '#0EA5E9' }}
             />
-            <Line 
+            
+            {/* Predicted price data */}
+            <Area 
               type="monotone" 
-              dataKey="predicted" 
+              dataKey="price" 
+              data={predictedData}
               stroke="#94A3B8" 
-              strokeDasharray="5 5" 
+              strokeDasharray="5 5"
               strokeWidth={2}
-              dot={false}
+              fill="url(#colorPredicted)"
+              activeDot={{ r: 4, stroke: 'white', strokeWidth: 1 }}
+              dot={{ r: 3, stroke: 'white', strokeWidth: 1, fill: '#94A3B8' }}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -142,6 +163,7 @@ const PriceGraph: React.FC<PriceGraphProps> = ({
           実際の価格
         </span>
         <span className="flex items-center">
+          <span className="inline-block w-3 h-3 bg-timedrop-muted-gray/50 rounded-full mr-1"></span>
           <span className="inline-block w-3 h-0.5 bg-timedrop-muted-gray mr-1 border-t border-dashed"></span>
           予測価格
         </span>
@@ -159,7 +181,7 @@ function generateMockData(currentPrice: number, originalPrice: number, propertyI
   // Generate random fluctuations based on the property ID (for consistency)
   const seed = propertyId ? propertyId.charCodeAt(0) + propertyId.charCodeAt(propertyId.length - 1) : 42;
   const rand = (min: number, max: number) => {
-    const x = Math.sin(seed) * 10000;
+    const x = Math.sin(seed * (min + max)) * 10000;
     return Math.floor((x - Math.floor(x)) * (max - min) + min);
   };
   
