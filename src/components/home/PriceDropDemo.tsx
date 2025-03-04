@@ -93,6 +93,18 @@ const PriceDropDemo = () => {
                   </div>
                 </div>
               </div>
+              
+              {/* Atami villa image */}
+              <div className="rounded-xl overflow-hidden shadow-md mb-4">
+                <img 
+                  src="/lovable-uploads/3a53000d-b50d-44f2-b87a-5f6437e87e41.png" 
+                  alt="熱海の高台から見渡す景色が楽しめるモダンなヴィラ" 
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-sm text-timedrop-muted-gray italic text-center">
+                熱海の高台に位置する、森の中の贅沢なヴィラからの眺望。
+              </p>
             </div>
           </AnimatedTransition>
           
