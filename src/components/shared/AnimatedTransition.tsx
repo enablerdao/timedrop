@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 interface AnimatedTransitionProps {
   children: React.ReactNode;
   className?: string;
-  animation?: 'fade' | 'slide-up' | 'slide-down';
+  animation?: 'fade' | 'slide-up' | 'slide-down' | 'slide-right' | 'slide-left';
   delay?: number;
   duration?: number;
 }
@@ -35,6 +35,10 @@ const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
         return 'animate-slide-up';
       case 'slide-down':
         return 'animate-slide-down';
+      case 'slide-right':
+        return 'animate-slide-right';
+      case 'slide-left':
+        return 'animate-slide-left';
       default:
         return 'animate-fade-in';
     }
