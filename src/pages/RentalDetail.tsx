@@ -5,13 +5,15 @@ import Navbar from '@/components/layout/Navbar';
 import { sampleProperties, type Property } from '@/data/properties';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import { useToast } from '@/components/ui/use-toast';
+import { getReviewsByPropertyId, getAverageRating } from '@/data/reviews';
 
-// Import the new component files
+// Import the components
 import PropertyBreadcrumbs from '@/components/rentals/detail/PropertyBreadcrumbs';
 import PropertyHeader from '@/components/rentals/detail/PropertyHeader';
 import PropertyDescription from '@/components/rentals/detail/PropertyDescription';
 import PriceHistorySection from '@/components/rentals/detail/PriceHistorySection';
 import PropertyBookingCard from '@/components/rentals/detail/PropertyBookingCard';
+import PropertyReviews from '@/components/rentals/detail/PropertyReviews';
 
 const RentalDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -68,6 +70,10 @@ const RentalDetail = () => {
     );
   }
 
+  // Get reviews for this property
+  const propertyReviews = getReviewsByPropertyId(property.id);
+  const averageRating = getAverageRating(property.id);
+
   return (
     <div className="min-h-screen flex flex-col bg-timedrop-gray/30">
       <Navbar />
@@ -96,6 +102,11 @@ const RentalDetail = () => {
                 <PropertyDescription property={property} />
                 
                 <PriceHistorySection property={property} />
+                
+                <PropertyReviews 
+                  reviews={propertyReviews} 
+                  averageRating={averageRating} 
+                />
               </AnimatedTransition>
             </div>
             

@@ -1,15 +1,115 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import RentalCard from '@/components/rentals/RentalCard';
-import { Search, Calendar, Users } from 'lucide-react';
+import { Search, Calendar, Users, SlidersHorizontal, X } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
-import { sampleProperties } from '@/data/properties';
+import { sampleProperties, type Property } from '@/data/properties';
+import FilterSidebar from '@/components/rentals/FilterSidebar';
+import { type FilterOptions } from '@/components/rentals/FilterSidebar';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
 const VacationRentals = () => {
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [properties, setProperties] = useState<Property[]>(sampleProperties);
+  const [filters, setFilters] = useState<FilterOptions>({
+    priceRange: [0, 200000],
+    capacity: 1,
+    amenities: [],
+    location: ''
+  });
+
+  // フィルターを適用する関数
+  const applyFilters = (filterOptions: FilterOptions) => {
+    const filteredProperties = sampleProperties.filter(property => {
+      // 価格フィルター
+      if (property.price < filterOptions.priceRange[0] || property.price > filterOptions.priceRange[1]) {
+        return false;
+      }
+      
+      // 人数フィルター
+      if (property.capacity < filterOptions.capacity) {
+        return false;
+      }
+      
+      // アメニティフィルター
+      if (filterOptions.amenities.length > 0) {
+        const hasAllAmenities = filterOptions.amenities.every(amenity => {
+          // 単純化のために、property.featuresに含まれる文字列で検索
+          return property.features.some(feature => 
+            feature.toLowerCase().includes(amenity.toLowerCase())
+          );
+        });
+        
+        if (!hasAllAmenities) {
+          return false;
+        }
+      }
+      
+      // ロケーションフィルター
+      if (filterOptions.location && !property.location.toLowerCase().includes(filterOptions.location.toLowerCase())) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    setProperties(filteredProperties);
+    
+    toast({
+      title: "フィルターを適用しました",
+      description: `${filteredProperties.length}件の物件が見つかりました`,
+    });
+  };
+
+  // 検索機能
+  const handleSearch = () => {
+    const searchResults = sampleProperties.filter(property => {
+      const matchesSearch = searchQuery ? 
+        property.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        property.location.toLowerCase().includes(searchQuery.toLowerCase()) : 
+        true;
+      
+      const matchesGuests = guests ? 
+        property.capacity >= parseInt(guests) : 
+        true;
+      
+      return matchesSearch && matchesGuests;
+    });
+    
+    setProperties(searchResults);
+    
+    toast({
+      title: "検索結果",
+      description: `${searchResults.length}件の物件が見つかりました`,
+    });
+  };
+
+  // 検索条件をリセット
+  const resetSearch = () => {
+    setSearchQuery('');
+    setDates('');
+    setGuests('');
+    setFilters({
+      priceRange: [0, 200000],
+      capacity: 1,
+      amenities: [],
+      location: ''
+    });
+    setProperties(sampleProperties);
+  };
+
+  // エンターキーでの検索
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-timedrop-gray/30">
@@ -27,7 +127,16 @@ const VacationRentals = () => {
                   className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    className="text-timedrop-muted-gray hover:text-timedrop-dark-gray"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
               
               <div className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3">
@@ -44,28 +153,85 @@ const VacationRentals = () => {
               <div className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3">
                 <Users className="text-timedrop-muted-gray flex-shrink-0" size={20} />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="人数"
                   className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
                   value={guests}
                   onChange={(e) => setGuests(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
+              </div>
+              
+              <div className="flex gap-2">
+                <Button 
+                  onClick={handleSearch}
+                  className="bg-timedrop-primary hover:bg-timedrop-primary/90"
+                >
+                  検索
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border-timedrop-gray/50 hover:bg-timedrop-gray/20"
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                >
+                  <SlidersHorizontal size={18} />
+                </Button>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="page-container py-6">
-          <h1 className="text-xl font-semibold text-timedrop-dark-gray mb-8">
-            TimeDrop厳選の民泊物件
-          </h1>
+        <div className="flex">
+          <FilterSidebar 
+            isOpen={isSidebarOpen} 
+            onClose={() => setIsSidebarOpen(false)}
+            onApplyFilters={applyFilters}
+            filters={filters}
+            setFilters={setFilters}
+          />
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sampleProperties.map((property, index) => (
-              <AnimatedTransition key={property.id} animation="slide-up" delay={index * 100}>
-                <RentalCard {...property} />
-              </AnimatedTransition>
-            ))}
+          <div className="flex-1 page-container py-6">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-xl font-semibold text-timedrop-dark-gray">
+                TimeDrop厳選の民泊物件
+                <span className="text-timedrop-muted-gray ml-2 text-sm font-normal">
+                  {properties.length}件
+                </span>
+              </h1>
+              
+              {(searchQuery || dates || guests || filters.amenities.length > 0 || filters.location) && (
+                <Button 
+                  variant="ghost" 
+                  onClick={resetSearch}
+                  className="text-timedrop-muted-gray hover:text-timedrop-dark-gray"
+                >
+                  検索条件をリセット
+                </Button>
+              )}
+            </div>
+            
+            {properties.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {properties.map((property, index) => (
+                  <AnimatedTransition key={property.id} animation="slide-up" delay={index * 100}>
+                    <RentalCard {...property} />
+                  </AnimatedTransition>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16 bg-white rounded-2xl shadow-sm">
+                <div className="text-5xl mb-4">🔍</div>
+                <h2 className="text-lg font-semibold text-timedrop-dark-gray mb-2">
+                  条件に一致する物件が見つかりませんでした
+                </h2>
+                <p className="text-timedrop-muted-gray mb-6">
+                  検索条件を変更して、もう一度お試しください
+                </p>
+                <Button onClick={resetSearch}>
+                  検索条件をリセット
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </main>
