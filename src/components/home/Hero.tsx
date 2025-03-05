@@ -100,15 +100,15 @@ const Hero = () => {
             <div className="flex flex-wrap items-center gap-4 text-sm text-timedrop-dark-gray">
               <span className="font-medium">人気の目的地:</span>
               {[
-                { name: 'ハワイのビーチハウス', id: 'hawaii-beachfront' },
-                { name: '熱海のサウナヴィラ', id: 'atami-sauna' },
-                { name: '北海道のリトリート', id: 'teshikaga-retreat' }
+                { name: 'ハワイのビーチハウス', id: 'hawaii-beach-house' },
+                { name: '熱海のサウナヴィラ', id: 'atami-sauna-villa' },
+                { name: '北海道のリトリート', id: 'hokkaido-retreat' }
               ].map((location) => (
                 <button
                   key={location.name}
                   onClick={() => {
                     setDestination(location.name);
-                    navigate(`/rentals/${location.id}`);
+                    navigate('/rentals');
                   }}
                   className="px-3 py-1 rounded-full border border-timedrop-gray hover:border-timedrop-blue hover:text-timedrop-blue transition-colors"
                 >

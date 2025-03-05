@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import FeatureHighlight from '@/components/home/FeatureHighlight';
@@ -33,13 +34,13 @@ const Index = () => {
             
             <AnimatedTransition animation="slide-up" delay={100}>
               <div className="flex justify-center">
-                <a
-                  href="/rentals"
+                <Link
+                  to="/rentals"
                   className="bg-timedrop-blue hover:bg-timedrop-dark-blue text-white py-4 px-8 rounded-xl flex items-center space-x-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:translate-y-[-2px]"
                 >
                   <span className="font-medium">民泊施設を検索する</span>
                   <ArrowRight size={18} />
-                </a>
+                </Link>
               </div>
             </AnimatedTransition>
           </div>
@@ -54,18 +55,18 @@ const Index = () => {
               </div>
               
               <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-                <a href="#" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
+                <Link to="/about" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
                   サービスについて
-                </a>
-                <a href="#" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
+                </Link>
+                <Link to="/rentals" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
                   ヴィラ一覧
-                </a>
-                <a href="#" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
-                  ヘルプ
-                </a>
-                <a href="#" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
-                  お問い合わせ
-                </a>
+                </Link>
+                <Link to="/long-stay" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
+                  長期滞在
+                </Link>
+                <Link to="/watchlist" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
+                  ウォッチリスト
+                </Link>
               </div>
             </div>
             

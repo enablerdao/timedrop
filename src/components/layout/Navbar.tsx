@@ -24,7 +24,8 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'ホーム', path: '/' },
-    { name: 'ホテル検索', path: '/hotels' },
+    { name: '民泊検索', path: '/rentals' },
+    { name: '長期滞在', path: '/long-stay' },
     { name: 'ウォッチリスト', path: '/watchlist' },
     { name: 'システム紹介', path: '/about' },
   ];
