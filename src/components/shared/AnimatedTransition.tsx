@@ -2,20 +2,22 @@
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
+type AnimationType = 'slide-up' | 'fade' | 'slide-down' | 'slide-right' | 'slide-left';
+
 interface AnimatedTransitionProps {
   children: React.ReactNode;
-  className?: string;
-  animation?: 'fade' | 'slide-up' | 'slide-down' | 'slide-right' | 'slide-left';
+  animation?: AnimationType;
   delay?: number;
   duration?: number;
+  className?: string;
 }
 
 const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
   children,
-  className,
   animation = 'fade',
   delay = 0,
-  duration = 500,
+  duration = 600,
+  className,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -27,35 +29,29 @@ const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
     return () => clearTimeout(timer);
   }, [delay]);
 
-  const getAnimationClass = () => {
-    switch (animation) {
-      case 'fade':
-        return 'animate-fade-in';
-      case 'slide-up':
-        return 'animate-slide-up';
-      case 'slide-down':
-        return 'animate-slide-down';
-      case 'slide-right':
-        return 'animate-slide-right';
-      case 'slide-left':
-        return 'animate-slide-left';
-      default:
-        return 'animate-fade-in';
-    }
+  const getAnimationClasses = () => {
+    const baseClasses = 'transition-all overflow-hidden';
+    const durationClass = `duration-${duration}`;
+
+    const animationClasses = {
+      'slide-up': 'translate-y-8 opacity-0',
+      'slide-down': '-translate-y-8 opacity-0',
+      'slide-right': '-translate-x-8 opacity-0',
+      'slide-left': 'translate-x-8 opacity-0',
+      'fade': 'opacity-0',
+    };
+
+    return cn(
+      baseClasses,
+      durationClass,
+      isVisible ? '' : animationClasses[animation]
+    );
   };
 
   return (
     <div
-      className={cn(
-        'transition-all',
-        isVisible ? getAnimationClass() : 'opacity-0',
-        className
-      )}
-      style={{ 
-        animationDuration: `${duration}ms`,
-        animationFillMode: 'forwards',
-        animationDelay: `${delay}ms`
-      }}
+      className={cn(getAnimationClasses(), className)}
+      style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
     </div>
