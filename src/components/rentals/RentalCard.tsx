@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, Users } from 'lucide-react';
+import { Star, Users, Heart } from 'lucide-react';
 import PriceTag from '../ui/PriceTag';
 import { type Property } from '@/data/properties';
+import { useWatchlist } from '@/hooks/use-watchlist';
+import { useToast } from '@/components/ui/use-toast';
 
 const RentalCard: React.FC<Property> = ({
   id,
@@ -21,6 +23,18 @@ const RentalCard: React.FC<Property> = ({
   period
 }) => {
   const navigate = useNavigate();
+  const { isInWatchlist, toggleWatchlist } = useWatchlist();
+  const { toast } = useToast();
+  const inWatchlist = isInWatchlist(id);
+
+  const handleWatchlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const isNowInWatchlist = toggleWatchlist(id);
+    toast({
+      title: isNowInWatchlist ? "ウォッチリストに追加しました" : "ウォッチリストから削除しました",
+      description: isNowInWatchlist ? "価格変動を通知します" : "物件がウォッチリストから削除されました",
+    });
+  };
 
   return (
     <div 
@@ -38,11 +52,23 @@ const RentalCard: React.FC<Property> = ({
             target.alt = "民泊施設のイメージ";
           }}
         />
-        {roomsLeft <= 3 && (
-          <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-            残り{roomsLeft}室
-          </div>
-        )}
+        <div className="absolute top-4 right-4 flex gap-2">
+          {roomsLeft <= 3 && (
+            <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              残り{roomsLeft}室
+            </div>
+          )}
+          <button
+            onClick={handleWatchlistToggle}
+            className={`p-2 rounded-full shadow-md transition-colors ${
+              inWatchlist 
+                ? "bg-red-50 text-red-500" 
+                : "bg-white text-gray-400 hover:text-red-500 hover:bg-red-50"
+            }`}
+          >
+            <Heart size={16} fill={inWatchlist ? "currentColor" : "none"} />
+          </button>
+        </div>
       </div>
 
       <div className="p-4">

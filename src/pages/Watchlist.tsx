@@ -1,19 +1,21 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import { Heart, Trash2 } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import { sampleProperties } from '@/data/properties';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useWatchlist } from '@/hooks/use-watchlist';
 
 const Watchlist = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [watchedProperties, setWatchedProperties] = useState(sampleProperties);
+  const { getWatchlistProperties, removeFromWatchlist } = useWatchlist();
+  const watchedProperties = getWatchlistProperties(sampleProperties);
 
-  const removeFromWatchlist = (id: string) => {
-    setWatchedProperties(watchedProperties.filter(property => property.id !== id));
+  const handleRemoveFromWatchlist = (id: string) => {
+    removeFromWatchlist(id);
     toast({
       title: "物件をウォッチリストから削除しました",
       description: "正常に削除されました",
@@ -21,7 +23,7 @@ const Watchlist = () => {
   };
 
   const viewProperty = (id: string) => {
-    navigate(`/hotels/${id}`);
+    navigate(`/rentals/${id}`);
   };
 
   return (
@@ -60,7 +62,10 @@ const Watchlist = () => {
                     
                     <div className="absolute top-4 right-4">
                       <button
-                        onClick={() => removeFromWatchlist(property.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveFromWatchlist(property.id);
+                        }}
                         className="bg-white p-2 rounded-full shadow-md hover:bg-red-50 transition-colors"
                       >
                         <Trash2 className="text-red-500" size={16} />
@@ -91,7 +96,7 @@ const Watchlist = () => {
               <h2 className="text-lg font-semibold text-timedrop-dark-gray mb-2">ウォッチリストは空です</h2>
               <p className="text-timedrop-muted-gray mb-4">気になる物件をウォッチリストに追加すると、ここに表示されます</p>
               <button 
-                onClick={() => navigate('/hotels')}
+                onClick={() => navigate('/rentals')}
                 className="px-4 py-2 bg-timedrop-primary text-white rounded-lg hover:bg-timedrop-primary/90 transition-colors"
               >
                 物件を探す

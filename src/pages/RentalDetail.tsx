@@ -6,6 +6,7 @@ import { sampleProperties, type Property } from '@/data/properties';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import { useToast } from '@/components/ui/use-toast';
 import { getReviewsByPropertyId, getAverageRating } from '@/data/reviews';
+import { useWatchlist } from '@/hooks/use-watchlist';
 
 // Import the components
 import PropertyBreadcrumbs from '@/components/rentals/detail/PropertyBreadcrumbs';
@@ -20,7 +21,7 @@ const RentalDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [property, setProperty] = useState<Property | null>(null);
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const { isInWatchlist, toggleWatchlist: toggleWatchlistState } = useWatchlist();
 
   useEffect(() => {
     const foundProperty = sampleProperties.find(p => p.id === id);
@@ -32,10 +33,12 @@ const RentalDetail = () => {
   }, [id, navigate]);
 
   const toggleWatchlist = () => {
-    setIsInWatchlist(!isInWatchlist);
+    if (!property) return;
+    
+    const isNowInWatchlist = toggleWatchlistState(property.id);
     toast({
-      title: isInWatchlist ? "ウォッチリストから削除しました" : "ウォッチリストに追加しました",
-      description: isInWatchlist ? "物件がウォッチリストから削除されました" : "価格変動を通知します",
+      title: isNowInWatchlist ? "ウォッチリストに追加しました" : "ウォッチリストから削除しました",
+      description: isNowInWatchlist ? "価格変動を通知します" : "物件がウォッチリストから削除されました",
     });
   };
 
@@ -94,7 +97,7 @@ const RentalDetail = () => {
                 
                 <PropertyHeader 
                   property={property}
-                  isInWatchlist={isInWatchlist}
+                  isInWatchlist={isInWatchlist(property.id)}
                   toggleWatchlist={toggleWatchlist}
                   shareProperty={shareProperty}
                 />
@@ -114,7 +117,7 @@ const RentalDetail = () => {
               <AnimatedTransition animation="slide-up" delay={200}>
                 <PropertyBookingCard 
                   property={property}
-                  isInWatchlist={isInWatchlist}
+                  isInWatchlist={isInWatchlist(property.id)}
                   toggleWatchlist={toggleWatchlist}
                 />
               </AnimatedTransition>
