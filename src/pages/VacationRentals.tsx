@@ -9,13 +9,22 @@ import FilterSidebar from '@/components/rentals/FilterSidebar';
 import { type FilterOptions } from '@/components/rentals/FilterSidebar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { DateRange } from 'react-day-picker';
+import { DateRangePicker } from '@/components/booking/DateRangePicker';
+import { GuestSelector } from '@/components/booking/GuestSelector';
+import { useLocation, useNavigate } from 'react-router-dom';
+import SearchModal from '@/components/search/SearchModal';
 
 const VacationRentals = () => {
   const { toast } = useToast();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [dates, setDates] = useState('');
-  const [guests, setGuests] = useState('');
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [properties, setProperties] = useState<Property[]>(sampleProperties);
   const [filters, setFilters] = useState<FilterOptions>({
     priceRange: [0, 200000],
@@ -23,6 +32,41 @@ const VacationRentals = () => {
     amenities: [],
     location: ''
   });
+  
+  // URLクエリパラメータから検索条件を取得
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const locationParam = params.get('location');
+    const checkInParam = params.get('checkIn');
+    const checkOutParam = params.get('checkOut');
+    const adultsParam = params.get('adults');
+    const childrenParam = params.get('children');
+    
+    if (locationParam) {
+      setSearchQuery(locationParam);
+      setFilters(prev => ({ ...prev, location: locationParam }));
+    }
+    
+    if (checkInParam && checkOutParam) {
+      setDateRange({
+        from: new Date(checkInParam),
+        to: new Date(checkOutParam)
+      });
+    }
+    
+    if (adultsParam) {
+      setAdults(parseInt(adultsParam));
+    }
+    
+    if (childrenParam) {
+      setChildren(parseInt(childrenParam));
+    }
+    
+    // 検索条件があれば自動的に検索を実行
+    if (locationParam || checkInParam || adultsParam) {
+      handleSearch();
+    }
+  }, [location.search]);
 
   // フィルターを適用する関数
   const applyFilters = (filterOptions: FilterOptions) => {
@@ -75,11 +119,15 @@ const VacationRentals = () => {
         property.location.toLowerCase().includes(searchQuery.toLowerCase()) : 
         true;
       
-      const matchesGuests = guests ? 
-        property.capacity >= parseInt(guests) : 
+      const matchesCapacity = (adults + children) > 0 ? 
+        property.capacity >= (adults + children) : 
         true;
       
-      return matchesSearch && matchesGuests;
+      // 日付範囲のチェック（実際のバックエンドでは空室状況をチェックする）
+      // ここではモック実装のため、すべての日付で利用可能と仮定
+      const matchesDateRange = true;
+      
+      return matchesSearch && matchesCapacity && matchesDateRange;
     });
     
     setProperties(searchResults);
@@ -93,8 +141,9 @@ const VacationRentals = () => {
   // 検索条件をリセット
   const resetSearch = () => {
     setSearchQuery('');
-    setDates('');
-    setGuests('');
+    setDateRange(undefined);
+    setAdults(2);
+    setChildren(0);
     setFilters({
       priceRange: [0, 200000],
       capacity: 1,
@@ -102,6 +151,9 @@ const VacationRentals = () => {
       location: ''
     });
     setProperties(sampleProperties);
+    
+    // URLからクエリパラメータを削除
+    navigate('/rentals');
   };
 
   // エンターキーでの検索
@@ -119,19 +171,20 @@ const VacationRentals = () => {
         <div className="bg-white border-b border-timedrop-gray/50 sticky top-16 z-40">
           <div className="page-container py-4">
             <div className="flex flex-col lg:flex-row items-stretch gap-4">
-              <div className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3">
+              <div 
+                className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3 cursor-pointer"
+                onClick={() => setIsSearchModalOpen(true)}
+              >
                 <Search className="text-timedrop-muted-gray flex-shrink-0" size={20} />
-                <input
-                  type="text"
-                  placeholder="場所を入力"
-                  className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
+                <div className="w-full text-timedrop-dark-gray">
+                  {searchQuery ? searchQuery : "場所を入力"}
+                </div>
                 {searchQuery && (
                   <button 
-                    onClick={() => setSearchQuery('')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSearchQuery('');
+                    }}
                     className="text-timedrop-muted-gray hover:text-timedrop-dark-gray"
                   >
                     <X size={16} />
@@ -139,32 +192,31 @@ const VacationRentals = () => {
                 )}
               </div>
               
-              <div className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3">
+              <div 
+                className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3 cursor-pointer"
+                onClick={() => setIsSearchModalOpen(true)}
+              >
                 <Calendar className="text-timedrop-muted-gray flex-shrink-0" size={20} />
-                <input
-                  type="text"
-                  placeholder="日付を選択"
-                  className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
-                  value={dates}
-                  onChange={(e) => setDates(e.target.value)}
-                />
+                <div className="w-full text-timedrop-dark-gray">
+                  {dateRange?.from && dateRange?.to ? 
+                    `${dateRange.from.toLocaleDateString('ja-JP')} - ${dateRange.to.toLocaleDateString('ja-JP')}` : 
+                    "日付を選択"}
+                </div>
               </div>
               
-              <div className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3">
+              <div 
+                className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3 cursor-pointer"
+                onClick={() => setIsSearchModalOpen(true)}
+              >
                 <Users className="text-timedrop-muted-gray flex-shrink-0" size={20} />
-                <input
-                  type="number"
-                  placeholder="人数"
-                  className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
+                <div className="w-full text-timedrop-dark-gray">
+                  {`大人 ${adults}名${children > 0 ? `、子供 ${children}名` : ""}`}
+                </div>
               </div>
               
               <div className="flex gap-2">
                 <Button 
-                  onClick={handleSearch}
+                  onClick={() => setIsSearchModalOpen(true)}
                   className="bg-timedrop-primary hover:bg-timedrop-primary/90"
                 >
                   検索
@@ -180,6 +232,11 @@ const VacationRentals = () => {
             </div>
           </div>
         </div>
+        
+        <SearchModal
+          isOpen={isSearchModalOpen}
+          onClose={() => setIsSearchModalOpen(false)}
+        />
         
         <div className="flex">
           <FilterSidebar 
@@ -199,7 +256,7 @@ const VacationRentals = () => {
                 </span>
               </h1>
               
-              {(searchQuery || dates || guests || filters.amenities.length > 0 || filters.location) && (
+              {(searchQuery || dateRange || adults > 2 || children > 0 || filters.amenities.length > 0 || filters.location) && (
                 <Button 
                   variant="ghost" 
                   onClick={resetSearch}

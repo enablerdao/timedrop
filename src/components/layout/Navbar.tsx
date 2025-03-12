@@ -1,12 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, User, Calendar, Menu, X } from 'lucide-react';
+import { Search, Calendar, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import UserMenu from '@/components/auth/UserMenu';
+import NotificationsPopover from '@/components/notifications/NotificationsPopover';
+import SearchModal from '@/components/search/SearchModal';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -60,15 +64,17 @@ const Navbar = () => {
 
         {/* Desktop Action Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          <button className="p-2 rounded-full hover:bg-timedrop-gray">
+          <button 
+            className="p-2 rounded-full hover:bg-timedrop-gray"
+            onClick={() => setIsSearchModalOpen(true)}
+          >
             <Search size={20} className="text-timedrop-dark-gray" />
           </button>
-          <button className="p-2 rounded-full hover:bg-timedrop-gray">
+          <Link to="/bookings" className="p-2 rounded-full hover:bg-timedrop-gray">
             <Calendar size={20} className="text-timedrop-dark-gray" />
-          </button>
-          <button className="p-2 rounded-full hover:bg-timedrop-gray">
-            <User size={20} className="text-timedrop-dark-gray" />
-          </button>
+          </Link>
+          <NotificationsPopover />
+          <UserMenu />
         </div>
 
         {/* Mobile Menu Button */}
@@ -102,22 +108,33 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex items-center space-x-2 pt-4 border-t border-timedrop-gray">
-              <button className="flex items-center space-x-2 p-2 text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
+              <button 
+                className="flex items-center space-x-2 p-2 text-sm text-timedrop-dark-gray hover:text-timedrop-blue"
+                onClick={() => {
+                  setIsSearchModalOpen(true);
+                  closeMenu();
+                }}
+              >
                 <Search size={18} />
                 <span>検索</span>
               </button>
-              <button className="flex items-center space-x-2 p-2 text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
+              <Link 
+                to="/bookings" 
+                className="flex items-center space-x-2 p-2 text-sm text-timedrop-dark-gray hover:text-timedrop-blue"
+                onClick={closeMenu}
+              >
                 <Calendar size={18} />
                 <span>予約</span>
-              </button>
-              <button className="flex items-center space-x-2 p-2 text-sm text-timedrop-dark-gray hover:text-timedrop-blue">
-                <User size={18} />
-                <span>ログイン</span>
-              </button>
+              </Link>
             </div>
           </nav>
         </div>
       )}
+      
+      <SearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
+      />
     </header>
   );
 };

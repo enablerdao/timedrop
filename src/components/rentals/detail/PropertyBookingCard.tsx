@@ -1,8 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, Users, Heart, Check, Clock } from 'lucide-react';
 import PriceTag from '@/components/ui/PriceTag';
 import { Property } from '@/data/properties';
+import { DateRange } from 'react-day-picker';
+import { DateRangePicker } from '@/components/booking/DateRangePicker';
+import { GuestSelector } from '@/components/booking/GuestSelector';
+import BookingForm from '@/components/booking/BookingForm';
+import { useNotifications } from '@/hooks/use-notifications';
 
 interface PropertyBookingCardProps {
   property: Property;
@@ -15,6 +20,23 @@ const PropertyBookingCard = ({
   isInWatchlist, 
   toggleWatchlist 
 }: PropertyBookingCardProps) => {
+  const { createPriceDropNotification } = useNotifications();
+  
+  // ウォッチリストに追加したときに価格変動通知をシミュレート
+  const handleToggleWatchlist = () => {
+    toggleWatchlist();
+    
+    // ウォッチリストに追加された場合、価格変動通知をシミュレート
+    if (!isInWatchlist) {
+      // 5秒後に価格変動通知を表示（デモ用）
+      setTimeout(() => {
+        const oldPrice = property.originalPrice;
+        const newPrice = property.price;
+        createPriceDropNotification(property, oldPrice, newPrice);
+      }, 5000);
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-border p-6 sticky top-24">
       <div className="mb-4">
@@ -37,47 +59,21 @@ const PropertyBookingCard = ({
         </div>
       )}
       
-      <div className="flex items-center gap-2 mb-4">
-        <div className="flex-1">
-          <div className="bg-timedrop-gray/50 rounded-xl px-4 py-3 flex items-center">
-            <Calendar className="text-timedrop-muted-gray flex-shrink-0 mr-2" size={20} />
-            <input
-              type="text"
-              placeholder="日付を選択"
-              className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
-            />
-          </div>
-        </div>
+      <BookingForm property={property} />
+      
+      <div className="mt-3">
+        <button 
+          onClick={handleToggleWatchlist}
+          className={`w-full py-3 rounded-xl font-medium border transition-colors ${
+            isInWatchlist 
+              ? "bg-red-50 text-red-500 border-red-500" 
+              : "bg-white text-timedrop-dark-gray border-timedrop-gray/50 hover:bg-timedrop-gray/20"
+          }`}
+        >
+          <Heart size={16} className="inline-block mr-2" fill={isInWatchlist ? "currentColor" : "none"} />
+          {isInWatchlist ? "ウォッチリストから削除" : "ウォッチリストに追加"}
+        </button>
       </div>
-      
-      <div className="flex items-center gap-2 mb-6">
-        <div className="flex-1">
-          <div className="bg-timedrop-gray/50 rounded-xl px-4 py-3 flex items-center">
-            <Users className="text-timedrop-muted-gray flex-shrink-0 mr-2" size={20} />
-            <input
-              type="text"
-              placeholder="人数"
-              className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
-            />
-          </div>
-        </div>
-      </div>
-      
-      <button className="w-full bg-timedrop-primary text-white rounded-xl py-3 font-medium hover:bg-timedrop-primary/90 transition-colors mb-3">
-        今すぐ予約する
-      </button>
-      
-      <button 
-        onClick={toggleWatchlist}
-        className={`w-full py-3 rounded-xl font-medium border transition-colors ${
-          isInWatchlist 
-            ? "bg-red-50 text-red-500 border-red-500" 
-            : "bg-white text-timedrop-dark-gray border-timedrop-gray/50 hover:bg-timedrop-gray/20"
-        }`}
-      >
-        <Heart size={16} className="inline-block mr-2" fill={isInWatchlist ? "currentColor" : "none"} />
-        {isInWatchlist ? "ウォッチリストから削除" : "ウォッチリストに追加"}
-      </button>
       
       <div className="mt-4 text-sm text-timedrop-muted-gray">
         <div className="flex items-center mb-1">
