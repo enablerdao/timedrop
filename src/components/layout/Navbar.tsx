@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, User, Calendar, Menu, X } from 'lucide-react';
+import { Search, User, Calendar, Menu, X, Clock, Droplet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Navbar = () => {
@@ -39,6 +39,9 @@ const Navbar = () => {
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Link to="/" className="flex items-center space-x-2" onClick={closeMenu}>
+          <div className="flex items-center justify-center w-8 h-8 bg-timedrop-blue rounded-full overflow-hidden text-white">
+            <Droplet size={16} className="fill-white" />
+          </div>
           <span className="text-2xl font-bold text-timedrop-blue">TimeDrop</span>
         </Link>
 
