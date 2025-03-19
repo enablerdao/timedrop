@@ -6,6 +6,7 @@ import Hero from '@/components/home/Hero';
 import FeatureHighlight from '@/components/home/FeatureHighlight';
 import PriceDropDemo from '@/components/home/PriceDropDemo';
 import AnimatedBackground from '@/components/home/AnimatedBackground';
+import PriceDropBackground from '@/components/home/PriceDropBackground';
 import { ArrowRight, Droplet } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import { Button } from '@/components/ui/button';
@@ -18,8 +19,13 @@ const Index = () => {
       
       <main className="flex-1 relative z-10">
         <Hero />
-        <FeatureHighlight />
-        <PriceDropDemo />
+        
+        {/* Price Drop Background SVG added here */}
+        <div className="relative">
+          <PriceDropBackground />
+          <FeatureHighlight />
+          <PriceDropDemo />
+        </div>
         
         <section className="section bg-white/80 backdrop-blur-sm">
           <div className="page-container">
