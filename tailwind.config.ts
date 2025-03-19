@@ -120,6 +120,17 @@ export default {
 				'pulse-soft': {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.7' }
+				},
+				'shine': {
+					'100%': { left: '125%' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'bounce-light': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' }
 				}
 			},
 			animation: {
@@ -130,7 +141,9 @@ export default {
 				'slide-up': 'slide-up 0.7s ease-out',
 				'slide-down': 'slide-down 0.7s ease-out',
 				'price-drop': 'price-drop 2s infinite ease-in-out',
-				'pulse-soft': 'pulse-soft 3s infinite ease-in-out'
+				'pulse-soft': 'pulse-soft 3s infinite ease-in-out',
+				'float': 'float 5s infinite ease-in-out',
+				'bounce-light': 'bounce-light 2s infinite ease-in-out'
 			}
 		}
 	},

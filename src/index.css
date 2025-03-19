@@ -130,3 +130,10 @@
     @apply rounded-xl bg-white border border-border shadow-sm hover:shadow-md transition-all duration-500 ease-out;
   }
 }
+
+/* Shine animation for buttons */
+@keyframes shine {
+  to {
+    left: 125%;
+  }
+}
