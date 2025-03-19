@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -6,7 +5,7 @@ import Hero from '@/components/home/Hero';
 import FeatureHighlight from '@/components/home/FeatureHighlight';
 import PriceDropDemo from '@/components/home/PriceDropDemo';
 import AnimatedBackground from '@/components/home/AnimatedBackground';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Droplet } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 
 const Index = () => {
@@ -51,9 +50,14 @@ const Index = () => {
         <footer className="py-8 bg-white/90 backdrop-blur-sm border-t border-border relative z-10">
           <div className="page-container">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="mb-4 md:mb-0">
-                <h3 className="text-xl font-bold text-timedrop-blue mb-1">TimeDrop</h3>
-                <p className="text-sm text-timedrop-muted-gray">時間とともに変わる新しい宿泊予約体験</p>
+              <div className="mb-4 md:mb-0 flex items-center">
+                <div className="flex items-center justify-center w-8 h-8 bg-timedrop-blue rounded-full overflow-hidden text-white mr-2">
+                  <Droplet size={16} className="fill-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-timedrop-blue mb-1">TimeDrop</h3>
+                  <p className="text-sm text-timedrop-muted-gray">時間とともに変わる新しい宿泊予約体験</p>
+                </div>
               </div>
               
               <div className="flex flex-wrap justify-center gap-4 md:gap-8">
