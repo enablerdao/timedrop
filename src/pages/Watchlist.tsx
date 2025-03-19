@@ -1,11 +1,11 @@
 
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
-import { Heart, Trash2 } from 'lucide-react';
+import { Heart, Trash2, Droplet } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 import { sampleProperties } from '@/data/properties';
 import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useWatchlist } from '@/hooks/use-watchlist';
 
 const Watchlist = () => {
@@ -105,6 +105,77 @@ const Watchlist = () => {
           )}
         </div>
       </main>
+
+      <footer className="py-8 bg-white/90 backdrop-blur-sm border-t border-border relative z-10">
+        <div className="page-container">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0 flex items-center">
+              <div className="flex items-center justify-center w-8 h-8 bg-timedrop-blue rounded-full overflow-hidden text-white mr-2 animate-pulse-soft">
+                <Droplet size={16} className="fill-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-timedrop-blue mb-1">TimeDrop</h3>
+                <p className="text-sm text-timedrop-muted-gray">時間とともに変わる新しい宿泊予約体験</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+              <Link to="/about" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue transition-all duration-300 hover:translate-y-[-1px]">
+                サービスについて
+              </Link>
+              <Link to="/rentals" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue transition-all duration-300 hover:translate-y-[-1px]">
+                ヴィラ一覧
+              </Link>
+              <Link to="/long-stay" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue transition-all duration-300 hover:translate-y-[-1px]">
+                長期滞在
+              </Link>
+              <Link to="/watchlist" className="text-sm text-timedrop-dark-gray hover:text-timedrop-blue transition-all duration-300 hover:translate-y-[-1px]">
+                ウォッチリスト
+              </Link>
+            </div>
+          </div>
+          
+          <div className="mt-8 pt-4 border-t border-timedrop-gray/50 flex flex-col items-center">
+            <a 
+              href="https://enablerhq.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="mb-4 transform hover:scale-105 transition-transform duration-300"
+            >
+              <svg viewBox="0 0 450 100" xmlns="http://www.w3.org/2000/svg" className="w-36 h-12">
+                <defs>
+                  <linearGradient id="topBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#22B6FF" />
+                    <stop offset="100%" stopColor="#2BBCFF" />
+                  </linearGradient>
+                  
+                  <linearGradient id="middleBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#22B6FF" />
+                    <stop offset="100%" stopColor="#4CAF50" />
+                  </linearGradient>
+                  
+                  <linearGradient id="bottomBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#2BBCFF" />
+                    <stop offset="100%" stopColor="#22B6FF" />
+                  </linearGradient>
+                </defs>
+                
+                {/* 3本のバー */}
+                <rect x="16" y="40" width="162" height="8" rx="4" fill="url(#topBarGradient)" />
+                <rect x="16" y="60" width="100" height="8" rx="4" fill="url(#middleBarGradient)" />
+                <rect x="16" y="80" width="162" height="8" rx="4" fill="url(#bottomBarGradient)" />
+                
+                {/* ENABLERテキスト */}
+                <text x="198" y="84" fontFamily="Montserrat, sans-serif" fontSize="48" fontWeight="bold" fill="url(#topBarGradient)">ENABLER</text>
+              </svg>
+            </a>
+            
+            <div className="text-center text-xs text-timedrop-muted-gray">
+              &copy; {new Date().getFullYear()} TimeDrop. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

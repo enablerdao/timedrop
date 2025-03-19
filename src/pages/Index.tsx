@@ -79,8 +79,44 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="mt-8 pt-4 border-t border-timedrop-gray/50 text-center text-xs text-timedrop-muted-gray">
-              &copy; {new Date().getFullYear()} TimeDrop. All rights reserved.
+            <div className="mt-8 pt-4 border-t border-timedrop-gray/50 flex flex-col items-center">
+              <a 
+                href="https://enablerhq.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="mb-4 transform hover:scale-105 transition-transform duration-300"
+              >
+                <svg viewBox="0 0 450 100" xmlns="http://www.w3.org/2000/svg" className="w-36 h-12">
+                  <defs>
+                    <linearGradient id="topBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#22B6FF" />
+                      <stop offset="100%" stopColor="#2BBCFF" />
+                    </linearGradient>
+                    
+                    <linearGradient id="middleBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#22B6FF" />
+                      <stop offset="100%" stopColor="#4CAF50" />
+                    </linearGradient>
+                    
+                    <linearGradient id="bottomBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#2BBCFF" />
+                      <stop offset="100%" stopColor="#22B6FF" />
+                    </linearGradient>
+                  </defs>
+                  
+                  {/* 3本のバー */}
+                  <rect x="16" y="40" width="162" height="8" rx="4" fill="url(#topBarGradient)" />
+                  <rect x="16" y="60" width="100" height="8" rx="4" fill="url(#middleBarGradient)" />
+                  <rect x="16" y="80" width="162" height="8" rx="4" fill="url(#bottomBarGradient)" />
+                  
+                  {/* ENABLERテキスト */}
+                  <text x="198" y="84" fontFamily="Montserrat, sans-serif" fontSize="48" fontWeight="bold" fill="url(#topBarGradient)">ENABLER</text>
+                </svg>
+              </a>
+              
+              <div className="text-center text-xs text-timedrop-muted-gray">
+                &copy; {new Date().getFullYear()} TimeDrop. All rights reserved.
+              </div>
             </div>
           </div>
         </footer>
