@@ -5,20 +5,22 @@ import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import FeatureHighlight from '@/components/home/FeatureHighlight';
 import PriceDropDemo from '@/components/home/PriceDropDemo';
+import AnimatedBackground from '@/components/home/AnimatedBackground';
 import { ArrowRight } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <AnimatedBackground />
       <Navbar />
       
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         <Hero />
         <FeatureHighlight />
         <PriceDropDemo />
         
-        <section className="section bg-timedrop-blue/5">
+        <section className="section bg-white/80 backdrop-blur-sm">
           <div className="page-container">
             <AnimatedTransition animation="slide-up">
               <div className="text-center mb-12">
@@ -46,7 +48,7 @@ const Index = () => {
           </div>
         </section>
         
-        <footer className="py-8 bg-white border-t border-border">
+        <footer className="py-8 bg-white/90 backdrop-blur-sm border-t border-border relative z-10">
           <div className="page-container">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="mb-4 md:mb-0">
