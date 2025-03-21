@@ -91,25 +91,30 @@ const Hero = () => {
           <AnimatedTransition animation="slide-up" delay={400}>
             <form 
               onSubmit={handleSearch} 
-              className="bg-white rounded-2xl shadow-lg p-4 flex flex-col sm:flex-row gap-4 mb-8"
+              className="bg-white rounded-2xl shadow-lg p-4 flex flex-col sm:flex-row gap-4 mb-8 relative z-20"
             >
               <div 
                 ref={searchContainerRef} 
-                className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4 relative ring-2 ring-timedrop-blue/20 rounded-lg px-3 py-2 hover:ring-timedrop-blue/50 transition-all duration-300"
+                className="flex-1 flex flex-col relative"
               >
-                <MapPin className="text-timedrop-blue flex-shrink-0" size={20} />
-                <input
-                  type="text"
-                  placeholder="目的地を入力"
-                  className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  onFocus={handleDestinationFocus}
-                />
+                <div className="flex items-center gap-2 border border-timedrop-gray rounded-lg px-3 py-2 hover:border-timedrop-blue focus-within:ring-2 focus-within:ring-timedrop-blue/50 transition-all duration-300">
+                  <MapPin className="text-timedrop-blue flex-shrink-0" size={20} />
+                  <input
+                    type="text"
+                    placeholder="目的地を選択"
+                    className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                    onFocus={handleDestinationFocus}
+                  />
+                </div>
                 
-                {/* 目的地の候補リスト */}
+                {/* 目的地の候補リスト - 絶対位置指定して他の要素と重ならないようにする */}
                 {showDestinations && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+                    <div className="py-2 px-2 bg-timedrop-gray/30 text-sm font-medium text-timedrop-dark-gray">
+                      人気の目的地
+                    </div>
                     {filteredDestinations.length > 0 ? (
                       <ul className="py-2">
                         {filteredDestinations.map((dest) => (
@@ -135,7 +140,7 @@ const Hero = () => {
                 )}
               </div>
               
-              <div className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4">
+              <div className="flex-1 flex items-center gap-2 border border-timedrop-gray rounded-lg px-3 py-2 hover:border-timedrop-blue transition-all duration-300">
                 <Calendar className="text-timedrop-muted-gray flex-shrink-0" size={20} />
                 <input
                   type="text"
@@ -146,7 +151,7 @@ const Hero = () => {
                 />
               </div>
               
-              <div className="flex-1 flex items-center gap-2">
+              <div className="flex-1 flex items-center gap-2 border border-timedrop-gray rounded-lg px-3 py-2 hover:border-timedrop-blue transition-all duration-300">
                 <Users className="text-timedrop-muted-gray flex-shrink-0" size={20} />
                 <input
                   type="text"
@@ -168,7 +173,7 @@ const Hero = () => {
           </AnimatedTransition>
 
           <AnimatedTransition animation="slide-up" delay={500}>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-timedrop-dark-gray">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-timedrop-dark-gray relative z-10">
               <span className="font-medium">人気の目的地:</span>
               {popularDestinations.map((location) => (
                 <button
