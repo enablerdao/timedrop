@@ -1,4 +1,3 @@
-
 export interface Property {
   id: string;
   name: string;
@@ -48,7 +47,7 @@ export const popularDestinations: Destination[] = [
   { 
     id: 'tokyo', 
     name: '東京', 
-    description: '東京タワーが見えるラグジュアリーマンション' 
+    description: '東京の魅力的な宿泊施設' 
   }
 ];
 

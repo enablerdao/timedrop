@@ -93,8 +93,11 @@ const Hero = () => {
               onSubmit={handleSearch} 
               className="bg-white rounded-2xl shadow-lg p-4 flex flex-col sm:flex-row gap-4 mb-8"
             >
-              <div ref={searchContainerRef} className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4 relative">
-                <Search className="text-timedrop-muted-gray flex-shrink-0" size={20} />
+              <div 
+                ref={searchContainerRef} 
+                className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4 relative ring-2 ring-timedrop-blue/20 rounded-lg px-3 py-2 hover:ring-timedrop-blue/50 transition-all duration-300"
+              >
+                <MapPin className="text-timedrop-blue flex-shrink-0" size={20} />
                 <input
                   type="text"
                   placeholder="目的地を入力"
