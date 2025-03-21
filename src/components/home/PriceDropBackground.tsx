@@ -29,21 +29,12 @@ const PriceDropBackground = () => {
           <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
             <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#0EA5E9" strokeWidth="0.5" strokeOpacity="0.2" />
           </pattern>
-          
-          <!-- Animation definitions -->
-          <animate 
-            id="fadeAnim" 
-            attributeName="opacity"
-            values="0.4;0.8;0.4" 
-            dur="4s" 
-            repeatCount="indefinite" 
-          />
         </defs>
         
-        <!-- Background grid -->
+        {/* Background grid */}
         <rect x="0" y="0" width="100%" height="100%" fill="url(#grid)" />
         
-        <!-- Main Chart Line - Decreasing price line -->
+        {/* Main Chart Line - Decreasing price line */}
         <path 
           d="M0,100 Q300,120 500,300 T900,500 T1200,600" 
           fill="none" 
@@ -52,10 +43,10 @@ const PriceDropBackground = () => {
           strokeDasharray="10,5"
           className="animate-pulse-soft"
         >
-          <animate attributeName="stroke-dashoffset" from="0" to="100" dur="15s" repeatCount="indefinite" />
+          <animate attributeName="strokeDashoffset" from="0" to="100" dur="15s" repeatCount="indefinite" />
         </path>
         
-        <!-- Price drop markers -->
+        {/* Price drop markers */}
         {[...Array(7)].map((_, i) => {
           const x = 100 + i * 150;
           const y = 150 + i * 60;
@@ -85,7 +76,7 @@ const PriceDropBackground = () => {
           );
         })}
         
-        <!-- Scattered price tags -->
+        {/* Scattered price tags */}
         {[...Array(12)].map((_, i) => {
           const x = 50 + i * 100;
           const y = 100 + (i % 5) * 120;
@@ -104,7 +95,7 @@ const PriceDropBackground = () => {
                 strokeWidth="1" 
               >
                 <animate
-                  attributeName="fill-opacity"
+                  attributeName="fillOpacity"
                   values="0.05;0.2;0.05"
                   dur={`${4 + i * 0.3}s`}
                   repeatCount="indefinite"
@@ -124,7 +115,7 @@ const PriceDropBackground = () => {
           );
         })}
         
-        <!-- Falling droplets with animated paths -->
+        {/* Falling droplets with animated paths */}
         {[...Array(15)].map((_, i) => {
           const x = 80 + i * 75;
           const y = 200 + (i % 3) * 150;
@@ -149,7 +140,7 @@ const PriceDropBackground = () => {
                   repeatCount="indefinite"
                 />
                 <animate
-                  attributeName="fill-opacity"
+                  attributeName="fillOpacity"
                   values="0.6;0.9;0.6"
                   dur={`${animDur * 0.7}s`}
                   begin={`${animDelay}s`}
@@ -160,7 +151,7 @@ const PriceDropBackground = () => {
           );
         })}
         
-        <!-- Graph-like visualization with animated elements -->
+        {/* Graph-like visualization with animated elements */}
         <g transform="translate(750, 250)">
           <rect x="0" y="0" width="300" height="200" fill="none" stroke="#0EA5E9" strokeWidth="1" strokeOpacity="0.3" />
           <polyline 
@@ -170,7 +161,7 @@ const PriceDropBackground = () => {
             strokeWidth="2" 
           >
             <animate
-              attributeName="stroke-dasharray"
+              attributeName="strokeDasharray"
               values="0,1000;600,1000"
               dur="3s"
               repeatCount="1"
@@ -180,7 +171,7 @@ const PriceDropBackground = () => {
           <text x="150" y="220" fontSize="14" fontFamily="sans-serif" textAnchor="middle" fill="#0EA5E9" fillOpacity="0.5">TIME</text>
           <text x="-20" y="100" fontSize="14" fontFamily="sans-serif" textAnchor="middle" fill="#0EA5E9" fillOpacity="0.5" transform="rotate(-90, -20, 100)">PRICE</text>
           
-          <!-- Animated price point -->
+          {/* Animated price point */}
           <circle cx="250" cy="190" r="5" fill="#F97316">
             <animate
               attributeName="r"
@@ -191,13 +182,13 @@ const PriceDropBackground = () => {
           </circle>
         </g>
         
-        <!-- Additional visual elements: Dotted grid lines -->
+        {/* Additional visual elements: Dotted grid lines */}
         <g>
           <line x1="0" y1="400" x2="1200" y2="400" stroke="#0EA5E9" strokeWidth="1" strokeOpacity="0.2" strokeDasharray="5,5" />
           <line x1="600" y1="0" x2="600" y2="800" stroke="#0EA5E9" strokeWidth="1" strokeOpacity="0.2" strokeDasharray="5,5" />
         </g>
         
-        <!-- Price notification symbols -->
+        {/* Price notification symbols */}
         {[...Array(5)].map((_, i) => {
           const x = 200 + i * 180;
           const y = 650 + (i % 3) * 30;
