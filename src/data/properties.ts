@@ -1,3 +1,4 @@
+
 export interface Property {
   id: string;
   name: string;
@@ -19,6 +20,37 @@ export interface Property {
     targetAudience?: string[];
   };
 }
+
+// 検索用の目的地データ
+export interface Destination {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl?: string;
+}
+
+export const popularDestinations: Destination[] = [
+  { 
+    id: 'hokkaido', 
+    name: '北海道', 
+    description: '美しい大自然と温泉を楽しめる北海道のリトリート'
+  },
+  { 
+    id: 'atami', 
+    name: '熱海', 
+    description: 'オーシャンビューのサウナヴィラでリラックス'
+  },
+  { 
+    id: 'hawaii', 
+    name: 'ハワイ', 
+    description: 'ビーチフロントでのリモートワークに最適なヴィラ'
+  },
+  { 
+    id: 'tokyo', 
+    name: '東京', 
+    description: '東京タワーが見えるラグジュアリーマンション' 
+  }
+];
 
 export const sampleProperties: Property[] = [
   {

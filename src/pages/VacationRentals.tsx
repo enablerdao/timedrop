@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import RentalCard from '@/components/rentals/RentalCard';
-import { Search, Calendar, Users, SlidersHorizontal, X } from 'lucide-react';
+import { Search, Calendar, Users, SlidersHorizontal, X, MapPin } from 'lucide-react';
 import AnimatedTransition from '@/components/shared/AnimatedTransition';
-import { sampleProperties, type Property } from '@/data/properties';
+import { sampleProperties, type Property, popularDestinations } from '@/data/properties';
 import FilterSidebar from '@/components/rentals/FilterSidebar';
 import { type FilterOptions } from '@/components/rentals/FilterSidebar';
 import { Button } from '@/components/ui/button';
@@ -17,12 +17,43 @@ const VacationRentals = () => {
   const [guests, setGuests] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [properties, setProperties] = useState<Property[]>(sampleProperties);
+  const [showDestinations, setShowDestinations] = useState(false);
+  const [filteredDestinations, setFilteredDestinations] = useState(popularDestinations);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  
   const [filters, setFilters] = useState<FilterOptions>({
     priceRange: [0, 200000],
     capacity: 1,
     amenities: [],
     location: ''
   });
+
+  // 外部クリックを検出して候補リストを閉じる
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowDestinations(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // 目的地の入力に基づいて候補をフィルタリング
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = popularDestinations.filter(dest => 
+        dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        dest.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredDestinations(filtered);
+    } else {
+      setFilteredDestinations(popularDestinations);
+    }
+  }, [searchQuery]);
 
   // フィルターを適用する関数
   const applyFilters = (filterOptions: FilterOptions) => {
@@ -111,6 +142,12 @@ const VacationRentals = () => {
     }
   };
 
+  // 目的地選択の処理
+  const handleDestinationSelect = (destName: string) => {
+    setSearchQuery(destName);
+    setShowDestinations(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-timedrop-gray/30">
       <Navbar />
@@ -119,7 +156,10 @@ const VacationRentals = () => {
         <div className="bg-white border-b border-timedrop-gray/50 sticky top-16 z-40">
           <div className="page-container py-4">
             <div className="flex flex-col lg:flex-row items-stretch gap-4">
-              <div className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3">
+              <div 
+                ref={searchContainerRef}
+                className="flex-1 flex items-center gap-2 bg-timedrop-gray/50 rounded-xl px-4 py-3 relative"
+              >
                 <Search className="text-timedrop-muted-gray flex-shrink-0" size={20} />
                 <input
                   type="text"
@@ -128,6 +168,7 @@ const VacationRentals = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  onFocus={() => setShowDestinations(true)}
                 />
                 {searchQuery && (
                   <button 
@@ -136,6 +177,33 @@ const VacationRentals = () => {
                   >
                     <X size={16} />
                   </button>
+                )}
+
+                {/* 目的地の候補リスト */}
+                {showDestinations && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+                    {filteredDestinations.length > 0 ? (
+                      <ul className="py-2">
+                        {filteredDestinations.map((dest) => (
+                          <li 
+                            key={dest.id}
+                            className="px-4 py-2 hover:bg-timedrop-gray/20 cursor-pointer flex items-center gap-2"
+                            onClick={() => handleDestinationSelect(dest.name)}
+                          >
+                            <MapPin size={16} className="text-timedrop-blue" />
+                            <div>
+                              <p className="font-medium text-timedrop-dark-gray">{dest.name}</p>
+                              <p className="text-xs text-timedrop-muted-gray">{dest.description}</p>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="p-4 text-center text-timedrop-muted-gray">
+                        該当する目的地が見つかりません
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
               

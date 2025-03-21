@@ -1,18 +1,58 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Search, Users, ArrowRight } from 'lucide-react';
+import { Calendar, Search, Users, ArrowRight, MapPin } from 'lucide-react';
 import AnimatedTransition from '../shared/AnimatedTransition';
+import { popularDestinations } from '@/data/properties';
 
 const Hero = () => {
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
   const [dates, setDates] = useState('');
   const [guests, setGuests] = useState('');
+  const [showDestinations, setShowDestinations] = useState(false);
+  const [filteredDestinations, setFilteredDestinations] = useState(popularDestinations);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  // 外部クリックを検出して候補リストを閉じる
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowDestinations(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // 目的地の入力に基づいて候補をフィルタリング
+  useEffect(() => {
+    if (destination) {
+      const filtered = popularDestinations.filter(dest => 
+        dest.name.toLowerCase().includes(destination.toLowerCase()) ||
+        dest.description.toLowerCase().includes(destination.toLowerCase())
+      );
+      setFilteredDestinations(filtered);
+    } else {
+      setFilteredDestinations(popularDestinations);
+    }
+  }, [destination]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     navigate('/rentals');
+  };
+
+  const handleDestinationSelect = (destName: string) => {
+    setDestination(destName);
+    setShowDestinations(false);
+  };
+
+  const handleDestinationFocus = () => {
+    setShowDestinations(true);
   };
 
   return (
@@ -53,7 +93,7 @@ const Hero = () => {
               onSubmit={handleSearch} 
               className="bg-white rounded-2xl shadow-lg p-4 flex flex-col sm:flex-row gap-4 mb-8"
             >
-              <div className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4">
+              <div ref={searchContainerRef} className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4 relative">
                 <Search className="text-timedrop-muted-gray flex-shrink-0" size={20} />
                 <input
                   type="text"
@@ -61,7 +101,35 @@ const Hero = () => {
                   className="w-full bg-transparent outline-none text-timedrop-dark-gray placeholder:text-timedrop-muted-gray"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
+                  onFocus={handleDestinationFocus}
                 />
+                
+                {/* 目的地の候補リスト */}
+                {showDestinations && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+                    {filteredDestinations.length > 0 ? (
+                      <ul className="py-2">
+                        {filteredDestinations.map((dest) => (
+                          <li 
+                            key={dest.id}
+                            className="px-4 py-2 hover:bg-timedrop-gray/20 cursor-pointer flex items-center gap-2"
+                            onClick={() => handleDestinationSelect(dest.name)}
+                          >
+                            <MapPin size={16} className="text-timedrop-blue" />
+                            <div>
+                              <p className="font-medium text-timedrop-dark-gray">{dest.name}</p>
+                              <p className="text-xs text-timedrop-muted-gray">{dest.description}</p>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="p-4 text-center text-timedrop-muted-gray">
+                        該当する目的地が見つかりません
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               
               <div className="flex-1 flex items-center gap-2 border-b sm:border-b-0 sm:border-r border-timedrop-gray pb-4 sm:pb-0 sm:pr-4">
@@ -99,13 +167,9 @@ const Hero = () => {
           <AnimatedTransition animation="slide-up" delay={500}>
             <div className="flex flex-wrap items-center gap-4 text-sm text-timedrop-dark-gray">
               <span className="font-medium">人気の目的地:</span>
-              {[
-                { name: 'ハワイのビーチハウス', id: 'hawaii-beach-house' },
-                { name: '熱海のサウナヴィラ', id: 'atami-sauna-villa' },
-                { name: '北海道のリトリート', id: 'hokkaido-retreat' }
-              ].map((location) => (
+              {popularDestinations.map((location) => (
                 <button
-                  key={location.name}
+                  key={location.id}
                   onClick={() => {
                     setDestination(location.name);
                     navigate('/rentals');
